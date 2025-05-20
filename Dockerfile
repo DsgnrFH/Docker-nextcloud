@@ -31,10 +31,11 @@ RUN chmod 777 /etc/php/8.3/apache2/conf.d/99-nextcloud.ini
 
 
 # SSL cert
+# Please fill in your information
 RUN apt install -y openssl
 RUN mkdir -p /etc/ssl/private /etc/ssl/certs && \
     openssl req -x509 -nodes -days 365 \
-    -subj "/C=DE/ST=Bayern/L=Nuremberg/O=Netways/OU=Unit/CN=localhost" \
+    -subj "/C=US/ST=State/L=City/O=Organisation/OU=Unit/CN=localhost" \
     -newkey rsa:2048 \
     -keyout /etc/ssl/private/nextcloud-selfsigned.key \
     -out /etc/ssl/certs/nextcloud-selfsigned.crt

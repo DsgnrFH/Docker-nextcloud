@@ -3,7 +3,7 @@ FROM ubuntu:24.04
 
 RUN mkdir /var/www
 
-RUN apt update
+RUN apt update && apt install -y ca-certificates
 RUN apt install -y apache2 libapache2-mod-php php php-cli php-mysql php-gd php-curl \
     php-mbstring php-zip php-intl php-imagick php-bcmath php-gmp php-fileinfo php-xml \
     mariadb-server
@@ -29,6 +29,23 @@ RUN chmod +x /entrypoint.sh
 COPY 99-nextcloud.ini /etc/php/8.3/apache2/conf.d/99-nextcloud.ini
 RUN chmod 777 /etc/php/8.3/apache2/conf.d/99-nextcloud.ini
 
-EXPOSE 80
+
+# SSL cert
+RUN apt install -y openssl
+RUN mkdir -p /etc/ssl/private /etc/ssl/certs && \
+    openssl req -x509 -nodes -days 365 \
+    -subj "/C=DE/ST=Bayern/L=Nuremberg/O=Netways/OU=Unit/CN=localhost" \
+    -newkey rsa:2048 \
+    -keyout /etc/ssl/private/nextcloud-selfsigned.key \
+    -out /etc/ssl/certs/nextcloud-selfsigned.crt
+RUN a2enmod ssl
+
+COPY nextcloud-ssl.conf /etc/apache2/sites-available/nextcloud-ssl.conf
+RUN a2ensite nextcloud-ssl.conf
+
+
+
+
+EXPOSE 80 443
 
 ENTRYPOINT ["/entrypoint.sh"]

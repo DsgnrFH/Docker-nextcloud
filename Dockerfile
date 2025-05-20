@@ -24,8 +24,10 @@ RUN cd /var/www/nextcloud && git submodule update --init
 RUN chown -R www-data:www-data /var/www/nextcloud
 
 COPY entrypoint.sh /entrypoint.sh
-
 RUN chmod +x /entrypoint.sh
+
+COPY 99-nextcloud.ini /etc/php/8.3/apache2/conf.d/99-nextcloud.ini
+RUN chmod 777 /etc/php/8.3/apache2/conf.d/99-nextcloud.ini
 
 EXPOSE 80
 

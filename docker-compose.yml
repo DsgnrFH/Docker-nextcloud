@@ -1,4 +1,3 @@
-version: '3.8'
 
 services:
   nextcloud:
@@ -14,7 +13,7 @@ services:
       NEXTCLOUD_ADMIN_USER: admin
       NEXTCLOUD_ADMIN_PASSWORD: adminpass
     volumes:
-      - nextcloud_data:/var/www/html
+      - nextcloud_data:/var/www/nextcloud
 
       
 volumes:
